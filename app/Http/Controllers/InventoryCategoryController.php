@@ -2,64 +2,73 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreInventoryCategoryRequest;
+use App\Http\Requests\UpdateInventoryCategoryRequest;
 use App\Models\InventoryCategory;
 use Illuminate\Http\Request;
 
 class InventoryCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $request->validate([
+            'search' => ['nullable', 'string', 'max:100'],
+        ]);
+
+        $query = InventoryCategory::withCount('inventoryItems');
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('category_name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $categories = $query
+            ->orderBy('category_name')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view(
+            'inventory.categories.index',
+            compact('categories')
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('inventory.categories.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreInventoryCategoryRequest $request)
     {
-        //
+        InventoryCategory::create($request->validated());
+
+        return redirect()
+            ->route('inventory.categories.index')
+            ->with('success', 'Inventory category created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(InventoryCategory $inventoryCategory)
+    public function edit(InventoryCategory $inventory_category)
     {
-        //
+        $category = $inventory_category;
+
+        return view(
+            'inventory.categories.edit',
+            compact('category')
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(InventoryCategory $inventoryCategory)
-    {
-        //
-    }
+    public function update(
+        UpdateInventoryCategoryRequest $request,
+        InventoryCategory $inventory_category
+    ) {
+        $inventory_category->update($request->validated());
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, InventoryCategory $inventoryCategory)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(InventoryCategory $inventoryCategory)
-    {
-        //
+        return redirect()
+            ->route('inventory.categories.index')
+            ->with('success', 'Inventory category updated successfully.');
     }
 }

@@ -23,6 +23,16 @@
                     {{ __('User Management') }}
                 </x-nav-link>
                 @endif
+                @if (auth()->user()->isOwner())
+
+                <x-nav-link
+                    :href="route('inventory.categories.index')"
+                    :active="request()->routeIs('inventory.*')">
+                    {{ __('Inventory') }}
+                </x-nav-link>
+
+                @endif
+
             </div>
 
             <!-- Settings Dropdown -->
@@ -77,6 +87,22 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @if (auth()->user()->isOwner())
+            <x-responsive-nav-link
+                :href="route('users.index')"
+                :active="request()->routeIs('users.*')">
+                {{ __('User Management') }}
+            </x-responsive-nav-link>
+            @endif
+            @if (auth()->user()->isOwner())
+
+            <x-responsive-nav-link
+                :href="route('inventory.items.index')"
+                :active="request()->routeIs('inventory.*')">
+                {{ __('Inventory') }}
+            </x-responsive-nav-link>
+
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
