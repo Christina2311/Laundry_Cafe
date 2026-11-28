@@ -94,4 +94,29 @@ class User extends Authenticatable
             'recorded_by'
         );
     }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->role?->role_name === $role;
+    }
+
+    public function isOwner(): bool
+    {
+        return $this->hasRole('Owner');
+    }
+
+    public function isCashier(): bool
+    {
+        return $this->hasRole('Cashier');
+    }
+
+    public function isStaff(): bool
+    {
+        return $this->hasRole('Staff');
+    }
+
+    public function isActive(): bool
+    {
+        return $this->is_active === true;
+    }
 }

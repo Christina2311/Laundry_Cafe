@@ -11,7 +11,7 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        $role = Role::where('role_name', 'Admin')
+        $role = Role::where('role_name', 'Owner')
             ->firstOrFail();
 
         $email = config('seeding.admin_email');
@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
         ]);
 
         if (!$user->exists) {
-            $user->name = 'System Administrator';
+            $user->name = 'System Owner';
             $user->password = $password;
             $user->role_id = $role->role_id;
             $user->is_active = true;
