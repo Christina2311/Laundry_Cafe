@@ -118,6 +118,14 @@ class UserController extends Controller
                 }
             }
 
+            // Recheck the acting Owner's authorization.
+            $authorized = User::whereKey($request->user()->id)
+                ->where('role_id', $ownerRole->role_id)
+                ->where('is_active', true)
+                ->exists();
+
+            abort_unless($authorized, 403);
+
             $user->name = $validated['name'];
             $user->email = $validated['email'];
             $user->role_id = $validated['role_id'];
@@ -140,6 +148,14 @@ class UserController extends Controller
         $validated = $request->validate([
             'is_active' => ['required', 'boolean'],
         ]);
+
+        // Recheck the acting Owner's authorization.
+        $authorized = User::whereKey($request->user()->id)
+            ->where('role_id', $ownerRole->role_id)
+            ->where('is_active', true)
+            ->exists();
+
+        abort_unless($authorized, 403);
 
         $isActive = (bool) $validated['is_active'];
 
