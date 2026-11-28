@@ -149,13 +149,7 @@ class UserController extends Controller
             'is_active' => ['required', 'boolean'],
         ]);
 
-        // Recheck the acting Owner's authorization.
-        $authorized = User::whereKey($request->user()->id)
-            ->where('role_id', $ownerRole->role_id)
-            ->where('is_active', true)
-            ->exists();
 
-        abort_unless($authorized, 403);
 
         $isActive = (bool) $validated['is_active'];
 
@@ -166,6 +160,14 @@ class UserController extends Controller
                 ->firstOrFail();
 
             $user = User::lockForUpdate()->findOrFail($user->id);
+
+            // Recheck the acting Owner's authorization.
+            $authorized = User::whereKey($request->user()->id)
+                ->where('role_id', $ownerRole->role_id)
+                ->where('is_active', true)
+                ->exists();
+
+            abort_unless($authorized, 403);
 
             // Prevent self-deactivation.
             if ($request->user()->id === $user->id && !$isActive) {
