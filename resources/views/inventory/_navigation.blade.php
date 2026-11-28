@@ -21,4 +21,41 @@
         Measurement Units
     </a>
 
+    <a href="{{ route('inventory.conversions.index') }}"
+        @class([ 'text-sm' , 'font-semibold text-blue-600'=> request()->routeIs('inventory.conversions.*'),
+        'text-gray-600 hover:underline' => !request()->routeIs('inventory.conversions.*'),
+        ])>
+        Unit Conversions
+    </a>
+
+    <a href="{{ route('inventory.movements.index') }}"
+        @class([ 'text-sm' , 'font-semibold text-blue-600'=> request()->routeIs('inventory.movements.*'),
+        'text-gray-600 hover:underline' => !request()->routeIs('inventory.movements.*'),
+        ])>
+        Stock History
+    </a>
+    <a href="{{ route('inventory.low-stock.index') }}"
+        @class([ 'text-sm' , 'font-semibold text-blue-600'=> request()->routeIs('inventory.low-stock.*'),
+        'text-gray-600 hover:underline' => !request()->routeIs('inventory.low-stock.*'),
+        ])>
+        Low Stock Monitoring
+    </a>
+    <a href="{{ route('inventory.menu-items.index') }}"
+        @class([ 'text-sm' , 'font-semibold text-blue-600'=> request()->routeIs('inventory.menu-items.*'),
+        'text-gray-600 hover:underline' => !request()->routeIs('inventory.menu-items.*'),
+        ])>
+        Menu Items
+    </a>
+    <a href="{{ route('inventory.sellable-items.index') }}"
+        @class([ 'text-sm' , 'font-semibold text-blue-600'=> request()->routeIs('inventory.sellable-items.*'),
+        'text-gray-600 hover:underline' => !request()->routeIs('inventory.sellable-items.*'),
+        ])>
+        Café Products
+    </a>
+    <a href="{{ route('inventory.recipes.index') }}"
+        @class([ 'text-sm' , 'font-semibold text-blue-600'=> request()->routeIs('inventory.recipes.*'),
+        'text-gray-600 hover:underline' => !request()->routeIs('inventory.recipes.*'),
+        ])>
+        Recipes
+    </a>
 </div>
